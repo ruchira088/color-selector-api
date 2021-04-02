@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: color-selector-api-certificate
+  namespace: {{ namespace }}
+spec:
+  secretName: color-selector-api-tls
+  issuerRef:
+    kind: ClusterIssuer
+    name: lets-encrypt
+  dnsNames:
+    - {{ hostname }}
