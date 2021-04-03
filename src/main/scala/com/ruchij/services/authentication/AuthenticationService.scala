@@ -5,8 +5,10 @@ import com.ruchij.daos.user.models.User
 
 trait AuthenticationService[F[_]] {
 
-  def token(username: String, password: String): F[AuthenticationToken]
+  def login(username: String, password: String): F[AuthenticationToken]
 
-  def authenticate(bearerToken: String): F[User]
+  def authenticate(userId: String, secret: String): F[User]
+
+  def logout(userId: String, secret: String): F[AuthenticationToken]
 
 }

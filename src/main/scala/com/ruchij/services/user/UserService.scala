@@ -6,6 +6,5 @@ trait UserService[F[_]] {
 
   def create(username: String, password: String, firstName: String, lastName: String, email: String): F[User]
 
-  def usernameAvailable(username: String): F[Boolean]
-
+  def retrieveAll(username: Option[String], offset: Int, pageSize: Int): F[List[User]]
 }

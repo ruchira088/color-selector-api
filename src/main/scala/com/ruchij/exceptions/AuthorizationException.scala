@@ -1,3 +1,3 @@
 package com.ruchij.exceptions
 
-case class AuthorizationException(errorMessage: String) extends Exception
+case class AuthorizationException(errorMessage: String) extends Exception(errorMessage)

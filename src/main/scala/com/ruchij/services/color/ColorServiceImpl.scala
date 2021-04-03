@@ -8,7 +8,7 @@ import com.ruchij.daos.color.models.{Color, ColorValue}
 import com.ruchij.daos.permission.models.PermissionType
 import com.ruchij.exceptions.ResourceConflictException
 import com.ruchij.services.authorization.AuthorizationService
-import com.ruchij.services.models.AuthenticatedRequestContext
+import com.ruchij.services.models.AuthenticatedContext
 import com.ruchij.syntax._
 import org.joda.time.DateTime
 
@@ -20,7 +20,7 @@ class ColorServiceImpl[F[_]: MonadError[*[_], Throwable]: Clock, G[_]](
 )(implicit transaction: G ~> F)
     extends ColorService[F] {
 
-  override def insert(userId: String, colorValue: ColorValue)(implicit context: AuthenticatedRequestContext): F[Color] =
+  override def insert(userId: String, colorValue: ColorValue)(implicit context: AuthenticatedContext): F[Color] =
     authorizationService.withPermission(context.user.id, userId, PermissionType.Write) {
       for {
         _ <- transaction(colorDao.findByUserId(userId))
@@ -34,7 +34,7 @@ class ColorServiceImpl[F[_]: MonadError[*[_], Throwable]: Clock, G[_]](
       } yield color
     }
 
-  override def findByUserId(userId: String)(implicit context: AuthenticatedRequestContext): F[List[Color]] =
+  override def findByUserId(userId: String)(implicit context: AuthenticatedContext): F[List[Color]] =
     authorizationService.withPermission(context.user.id, userId, PermissionType.Read) {
       transaction(colorDao.findByUserId(userId))
     }

@@ -5,6 +5,8 @@ import cats.implicits._
 import cats.{Monad, MonadError, ~>}
 import com.ruchij.daos.credentials.CredentialsDao
 import com.ruchij.daos.credentials.models.Credentials
+import com.ruchij.daos.permission.PermissionDao
+import com.ruchij.daos.permission.models.{Permission, PermissionType}
 import com.ruchij.daos.user.UserDao
 import com.ruchij.daos.user.models.User
 import com.ruchij.exceptions.ResourceConflictException
@@ -19,7 +21,8 @@ import java.util.concurrent.TimeUnit
 class UserServiceImpl[F[_]: Monad: Clock: RandomGenerator[*[_], UUID], G[_]: MonadError[*[_], Throwable]](
   passwordHashService: PasswordHashService[F],
   userDao: UserDao[G],
-  credentialsDao: CredentialsDao[G]
+  credentialsDao: CredentialsDao[G],
+  permissionDao: PermissionDao[G]
 )(implicit transaction: G ~> F)
     extends UserService[F] {
 
@@ -47,8 +50,13 @@ class UserServiceImpl[F[_]: Monad: Clock: RandomGenerator[*[_], UUID], G[_]: Mon
 
       user = User(userId, timestamp, timestamp, username, firstName, lastName, email)
       credentials = Credentials(userId, timestamp, timestamp, hashedPassword)
+      permission = Permission(userId, timestamp, userId, PermissionType.Write)
 
-      _ <- transaction { userDao.insert(user).productR(credentialsDao.insert(credentials)) }
+      _ <- transaction {
+        userDao.insert(user)
+          .productR(credentialsDao.insert(credentials))
+          .productR(permissionDao.insert(permission))
+      }
 
     } yield user
 
