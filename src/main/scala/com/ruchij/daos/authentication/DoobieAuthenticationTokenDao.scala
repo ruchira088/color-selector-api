@@ -17,7 +17,7 @@ object DoobieAuthenticationTokenDao extends AuthenticationTokenDao[ConnectionIO]
           ${authenticationToken.modifiedAt},
           ${authenticationToken.secret},
           ${authenticationToken.expiresAt},
-          ${authenticationToken.renewals},
+          ${authenticationToken.renewals}
         )
     """
       .update
@@ -37,7 +37,7 @@ object DoobieAuthenticationTokenDao extends AuthenticationTokenDao[ConnectionIO]
         SET
           modified_at = ${authenticationToken.modifiedAt},
           secret = ${authenticationToken.secret},
-          expires_at = ${authenticationToken.expiresAt}
+          expires_at = ${authenticationToken.expiresAt},
           renewals = ${authenticationToken.renewals}
         WHERE user_id = ${authenticationToken.userId} AND created_at = ${authenticationToken.createdAt}
     """

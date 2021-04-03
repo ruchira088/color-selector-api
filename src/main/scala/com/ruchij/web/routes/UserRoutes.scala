@@ -2,7 +2,8 @@ package com.ruchij.web.routes
 
 import cats.effect.Sync
 import cats.implicits._
-import com.ruchij.circe.Encoders.dateTimeEncoder
+import com.ruchij.circe.Decoders.colorValueDecoder
+import com.ruchij.circe.Encoders.{colorValueEncoder, dateTimeEncoder}
 import com.ruchij.services.authentication.AuthenticationService
 import com.ruchij.services.authorization.AuthorizationService
 import com.ruchij.services.color.ColorService

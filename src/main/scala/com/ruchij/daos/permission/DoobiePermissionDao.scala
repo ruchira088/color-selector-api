@@ -21,7 +21,7 @@ object DoobiePermissionDao extends PermissionDao[ConnectionIO] {
     resourceId: UUID,
     permissionType: PermissionType
   ): ConnectionIO[Option[Permission]] =
-    (sql"SELECT user_id, created_at, resource_id, permission_type FROM permission" ++
+    (fr"SELECT user_id, created_at, resource_id, permission_type FROM permission" ++
       fragments.whereAnd(
         fr"user_id = $requesterId",
         fr"resource_id = $resourceId",

@@ -1,7 +1,7 @@
 package com.ruchij.web.middleware
 
-import cats.{ApplicativeError, MonadError}
 import cats.data.{Kleisli, OptionT}
+import cats.effect.Sync
 import com.ruchij.exceptions.ResourceNotFoundException
 import com.ruchij.services.authentication.AuthenticationService
 import com.ruchij.services.models.AuthenticatedContext
@@ -14,9 +14,9 @@ import org.http4s.{AuthScheme, ContextRequest, Request, Response}
 import scala.util.matching.Regex
 
 object AuthenticationMiddleware {
-  val BearerToken: Regex = "(\\S+):(\\S+)".r
+  val BearerToken: Regex = "(\\S+)--(\\S+)".r
 
-  def apply[F[_]: MonadError[*[_], Throwable]](
+  def apply[F[_]: Sync](
     authenticationService: AuthenticationService[F]
   ): Kleisli[OptionT[F, *], ContextRequest[F, AuthenticatedContext], Response[F]] => Kleisli[OptionT[F, *], ContextRequest[F, CorrelationID], Response[F]] =
     authenticatedHttpRoutes =>
@@ -34,18 +34,16 @@ object AuthenticationMiddleware {
         yield response
     }
 
-  def bearerToken[F[_]: ApplicativeError[*[_], Throwable]](request: Request[F]): F[(String, String)] =
-    findBearerToken(request)
-      .toF[Throwable, F](ResourceNotFoundException("Missing or invalid Authorization header with Bearer token"))
+  def bearerToken[F[_]: Sync](request: Request[F]): F[(String, String)] =
+    Sync[F].defer {
+      findBearerToken(request)
+        .toF[Throwable, F](ResourceNotFoundException("Missing or invalid Authorization header with Bearer token"))
+    }
 
   private def findBearerToken[F[_]](request: Request[F]): Option[(String, String)] =
-    request.headers
-      .get(Authorization)
+    request.headers.get(Authorization)
       .collect {
-        case Authorization(Token(AuthScheme.Bearer, bearerToken)) => bearerToken
-      }
-      .collect {
-        case BearerToken(userId, secret) => (userId, secret)
+        case Authorization(Token(AuthScheme.Bearer, BearerToken(userId, secret))) => (userId, secret)
       }
 
 }

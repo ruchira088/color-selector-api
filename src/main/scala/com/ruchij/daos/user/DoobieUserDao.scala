@@ -15,7 +15,7 @@ object DoobieUserDao extends UserDao[ConnectionIO] {
 
   override def insert(user: User): ConnectionIO[Int] =
     sql"""
-      INSERT INTO user_info(user_id, created_at, modified_at, username, first_name, last_name, email)
+      INSERT INTO user_info (id, created_at, modified_at, username, first_name, last_name, email)
         VALUES (
           ${user.id},
           ${user.createdAt},

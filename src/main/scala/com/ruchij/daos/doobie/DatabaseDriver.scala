@@ -14,7 +14,7 @@ sealed abstract class DatabaseDriver[A <: Driver](implicit classTag: ClassTag[A]
 }
 
 object DatabaseDriver extends Enum[DatabaseDriver[_]] {
-  val DatabaseType: Regex = "jdbc:([^:]*):*".r
+  val DatabaseType: Regex = "jdbc:([^:]+):.*".r
 
   case object H2 extends DatabaseDriver[h2.Driver] {
     override val name: String = "h2"
@@ -29,6 +29,6 @@ object DatabaseDriver extends Enum[DatabaseDriver[_]] {
   val infer: String => Option[DatabaseDriver[_]] = {
     case DatabaseType(name) => values.find(_.name.equalsIgnoreCase(name))
 
-    case _ => None
+    case value => None
   }
 }
