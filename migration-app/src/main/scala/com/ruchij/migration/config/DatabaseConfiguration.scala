@@ -3,6 +3,7 @@ package com.ruchij.migration.config
 import cats.{Applicative, ApplicativeError}
 import pureconfig.ConfigObjectSource
 import pureconfig.error.ConfigReaderException
+import pureconfig.generic.auto._
 
 case class DatabaseConfiguration(url: String, user: String, password: String)
 

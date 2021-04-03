@@ -1,7 +1,11 @@
 package com.ruchij.types
 
 import cats.data.{NonEmptyList, ValidatedNel}
+import cats.effect.Sync
 import cats.{Applicative, ApplicativeError, Semigroup, ~>}
+import doobie.ConnectionIO
+import doobie.implicits._
+import doobie.util.transactor.Transactor
 
 object FunctionKTypes {
 
@@ -9,6 +13,14 @@ object FunctionKTypes {
     new ~>[Either[L, *], F] {
       override def apply[A](either: Either[L, A]): F[A] =
         either.fold(ApplicativeError[F, L].raiseError, Applicative[F].pure)
+    }
+
+  def connectionIoToF[F[_]: Sync](transactor: Transactor[F]): ConnectionIO ~> F =
+    new ~>[ConnectionIO, F] {
+      override def apply[A](connectionIO: ConnectionIO[A]): F[A] =
+        Sync[F].defer {
+          connectionIO.transact(transactor)
+        }
     }
 
   implicit def validatedNelToF[L: Semigroup, F[_]: ApplicativeError[*[_], L]]: ValidatedNel[L, *] ~> F =

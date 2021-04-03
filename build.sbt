@@ -8,23 +8,29 @@ import scala.sys.process.ProcessBuilder
 val ReleaseBranch = "dev"
 val ProductionBranch = "main"
 
+inThisBuild {
+  Seq(
+    organization := "com.ruchij",
+    scalaVersion := Dependencies.ScalaVersion,
+    maintainer := "me@ruchij.com",
+    scalacOptions ++= Seq("-Xlint", "-feature", "-Wconf:cat=lint-byname-implicit:s"),
+    addCompilerPlugin(kindProjector),
+    addCompilerPlugin(betterMonadicFor),
+    addCompilerPlugin(scalaTypedHoles)
+  )
+}
+
 lazy val root =
   (project in file("."))
     .enablePlugins(BuildInfoPlugin, JavaAppPackaging)
     .settings(
       name := "color-selector-api",
-      organization := "com.ruchij",
-      scalaVersion := Dependencies.ScalaVersion,
-      maintainer := "me@ruchij.com",
       libraryDependencies ++= rootDependencies ++ rootTestDependencies.map(_ % Test),
       buildInfoKeys := Seq[BuildInfoKey](name, organization, version, scalaVersion, sbtVersion),
       buildInfoPackage := "com.eed3si9n.ruchij",
-      topLevelDirectory := None,
-      scalacOptions ++= Seq("-Xlint", "-feature", "-Wconf:cat=lint-byname-implicit:s"),
-      addCompilerPlugin(kindProjector),
-      addCompilerPlugin(betterMonadicFor),
-      addCompilerPlugin(scalaTypedHoles)
-)
+      topLevelDirectory := None
+    )
+    .dependsOn(migrationApp)
 
 lazy val rootDependencies =
   Seq(
@@ -39,12 +45,22 @@ lazy val rootDependencies =
     bcrypt,
     doobie,
     postgresql,
+    h2,
     pureconfig,
     logbackClassic
   )
 
 lazy val rootTestDependencies =
   Seq(scalaTest, pegdown)
+
+lazy val migrationApp =
+  (project in file("./migration-app"))
+    .enablePlugins(JavaAppPackaging)
+    .settings(
+      name := "migration-application",
+      topLevelDirectory := None,
+      libraryDependencies ++= Seq(flyway, catsEffect, pureconfig, logbackClassic, postgresql, h2)
+    )
 
 addCommandAlias("testWithCoverage", "; coverage; test; coverageReport")
 

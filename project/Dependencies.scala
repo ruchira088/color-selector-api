@@ -22,6 +22,10 @@ object Dependencies
 
   lazy val postgresql = "org.postgresql" % "postgresql" % "42.2.19"
 
+  lazy val h2 = "com.h2database" % "h2" % "1.4.200"
+
+  lazy val catsEffect = "org.typelevel" %% "cats-effect" % "2.4.1"
+
   lazy val jodaTime = "joda-time" % "joda-time" % "2.10.10"
 
   lazy val enumeratum = "com.beachape" %% "enumeratum" % "1.6.1"
@@ -31,6 +35,8 @@ object Dependencies
   lazy val pureconfig = "com.github.pureconfig" %% "pureconfig" % "0.14.1"
 
   lazy val logbackClassic = "ch.qos.logback" % "logback-classic" % "1.2.3"
+
+  lazy val flyway = "org.flywaydb" % "flyway-core" % "7.7.2"
 
   lazy val kindProjector = "org.typelevel" %% "kind-projector" % "0.11.3" cross CrossVersion.full
 

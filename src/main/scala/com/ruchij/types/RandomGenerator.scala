@@ -1,7 +1,10 @@
 package com.ruchij.types
 
+import cats.effect.{IO, Sync}
 import cats.{Applicative, Monad}
 import cats.implicits._
+
+import java.util.UUID
 
 trait RandomGenerator[F[_], +A] {
   def generate[B >: A]: F[B]
@@ -9,6 +12,13 @@ trait RandomGenerator[F[_], +A] {
 
 object RandomGenerator {
   def apply[F[_], A](implicit randomGenerator: RandomGenerator[F, A]): RandomGenerator[F, A] = randomGenerator
+
+  def apply[F[_]: Sync, A](thunk: => A): RandomGenerator[F, A] =
+    new RandomGenerator[F, A] {
+      override def generate[B >: A]: F[B] = Sync[F].delay(thunk)
+    }
+
+  implicit val randomUuidGenerator: RandomGenerator[IO, UUID] = RandomGenerator[IO, UUID](UUID.randomUUID())
 
   implicit def randomGeneratorMonad[F[_]: Monad]: Monad[RandomGenerator[F, *]] =
     new Monad[RandomGenerator[F, *]] {

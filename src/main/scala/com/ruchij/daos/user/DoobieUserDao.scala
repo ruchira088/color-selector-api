@@ -40,7 +40,7 @@ object DoobieUserDao extends UserDao[ConnectionIO] {
 
   override def search(maybeUsername: Option[String], offset: Int, pageSize: Int): ConnectionIO[List[User]] =
     (SelectQuery ++
-      fragments.whereAndOpt(maybeUsername.map(username => fr"username = $username")) ++
+      fragments.whereAndOpt(maybeUsername.map(username => fr"username LIKE ${"%" + username + "%"}")) ++
       fr" LIMIT $pageSize OFFSET ${offset * pageSize}")
       .query[User]
       .to[List]
