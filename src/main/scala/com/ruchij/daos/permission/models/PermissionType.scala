@@ -9,11 +9,11 @@ sealed trait PermissionType extends EnumEntry {
 
 object PermissionType extends Enum[PermissionType] {
   case object Write extends PermissionType {
-    override val all: NonEmptyList[PermissionType] = NonEmptyList.of(Write, Read)
+    override val all: NonEmptyList[PermissionType] = NonEmptyList.of(Write)
   }
 
   case object Read extends PermissionType {
-    override val all: NonEmptyList[PermissionType] = NonEmptyList.of(Read)
+    override val all: NonEmptyList[PermissionType] = NonEmptyList.of(Read, Write)
   }
 
   override def values: IndexedSeq[PermissionType] = findValues

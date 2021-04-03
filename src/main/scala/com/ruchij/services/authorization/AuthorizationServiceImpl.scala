@@ -20,7 +20,7 @@ class AuthorizationServiceImpl[F[_]: MonadError[*[_], Throwable]: Clock, G[_]](p
   override def withPermission[A](requesterId: UUID, resourceId: UUID, permissionType: PermissionType)(
     block: => F[A]
   ): F[A] =
-    transaction(permissionDao.findBy(requesterId, requesterId, permissionType))
+    transaction(permissionDao.findBy(requesterId, resourceId, permissionType))
       .flatMap {
         _.toF[Throwable, F](AuthorizationException(s"$requesterId does not $permissionType permission to $resourceId"))
       }
