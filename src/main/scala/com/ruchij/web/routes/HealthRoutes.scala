@@ -2,6 +2,7 @@ package com.ruchij.web.routes
 
 import cats.effect.Sync
 import cats.implicits.toFlatMapOps
+import com.ruchij.circe.Encoders.dateTimeEncoder
 import com.ruchij.services.health.HealthService
 import com.ruchij.web.middleware.CorrelationIdMiddleware.CorrelationID
 import io.circe.generic.auto.exportEncoder

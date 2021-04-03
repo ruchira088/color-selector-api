@@ -11,7 +11,7 @@ import com.ruchij.daos.credentials.models.Credentials
 import com.ruchij.daos.user.UserDao
 import com.ruchij.daos.user.models.User
 import com.ruchij.exceptions.{AuthenticationException, ResourceNotFoundException}
-import com.ruchij.services.hash.password.PasswordHashService
+import com.ruchij.services.hash.password.PasswordHashingService
 import com.ruchij.types.RandomGenerator
 import com.ruchij.syntax._
 import org.joda.time.DateTime
@@ -20,11 +20,11 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 class AuthenticationServiceImpl[F[_]: MonadError[*[_], Throwable]: Clock: RandomGenerator[*[_], UUID], G[_]: Monad](
-  passwordHashService: PasswordHashService[F],
-  authenticationTokenDao: AuthenticationTokenDao[G],
-  userDao: UserDao[G],
-  credentialsDao: CredentialsDao[G],
-  authenticationConfiguration: AuthenticationConfiguration
+                                                                                                                     passwordHashService: PasswordHashingService[F],
+                                                                                                                     authenticationTokenDao: AuthenticationTokenDao[G],
+                                                                                                                     userDao: UserDao[G],
+                                                                                                                     credentialsDao: CredentialsDao[G],
+                                                                                                                     authenticationConfiguration: AuthenticationConfiguration
 )(implicit transaction: G ~> F)
     extends AuthenticationService[F] {
 

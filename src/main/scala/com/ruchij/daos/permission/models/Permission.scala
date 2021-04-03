@@ -2,4 +2,6 @@ package com.ruchij.daos.permission.models
 
 import org.joda.time.DateTime
 
-case class Permission(userId: String, createdAt: DateTime, resourceId: String, permissionType: PermissionType)
+import java.util.UUID
+
+case class Permission(userId: UUID, createdAt: DateTime, resourceId: UUID, permissionType: PermissionType)

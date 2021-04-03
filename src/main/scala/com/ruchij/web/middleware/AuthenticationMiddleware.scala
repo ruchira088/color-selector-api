@@ -34,11 +34,11 @@ object AuthenticationMiddleware {
         yield response
     }
 
-  def bearerToken[F[_]: ApplicativeError[*[_], Throwable]](request: Request[_]): F[(String, String)] =
+  def bearerToken[F[_]: ApplicativeError[*[_], Throwable]](request: Request[F]): F[(String, String)] =
     findBearerToken(request)
       .toF[Throwable, F](ResourceNotFoundException("Missing or invalid Authorization header with Bearer token"))
 
-  private def findBearerToken(request: Request[_]): Option[(String, String)] =
+  private def findBearerToken[F[_]](request: Request[F]): Option[(String, String)] =
     request.headers
       .get(Authorization)
       .collect {

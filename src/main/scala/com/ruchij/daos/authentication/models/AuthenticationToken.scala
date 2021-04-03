@@ -2,8 +2,10 @@ package com.ruchij.daos.authentication.models
 
 import org.joda.time.DateTime
 
+import java.util.UUID
+
 case class AuthenticationToken(
-  userId: String,
+  userId: UUID,
   createdAt: DateTime,
   modifiedAt: DateTime,
   secret: String,

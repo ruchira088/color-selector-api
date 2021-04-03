@@ -10,13 +10,14 @@ import com.ruchij.services.models.AuthenticatedContext
 import com.ruchij.syntax._
 import org.joda.time.DateTime
 
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 class AuthorizationServiceImpl[F[_]: MonadError[*[_], Throwable]: Clock, G[_]](permissionDao: PermissionDao[G])(
   implicit transaction: G ~> F
 ) extends AuthorizationService[F] {
 
-  override def withPermission[A](requesterId: String, resourceId: String, permissionType: PermissionType)(
+  override def withPermission[A](requesterId: UUID, resourceId: UUID, permissionType: PermissionType)(
     block: => F[A]
   ): F[A] =
     transaction(permissionDao.findBy(requesterId, requesterId, permissionType))
@@ -25,7 +26,7 @@ class AuthorizationServiceImpl[F[_]: MonadError[*[_], Throwable]: Clock, G[_]](p
       }
       .productR(block)
 
-  override def grantPermission(userId: String, resourceId: String, permissionType: PermissionType)(
+  override def grantPermission(userId: UUID, resourceId: UUID, permissionType: PermissionType)(
     implicit authenticatedContext: AuthenticatedContext
   ): F[Permission] =
     withPermission(authenticatedContext.user.id, resourceId, PermissionType.Write) {

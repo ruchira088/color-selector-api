@@ -18,9 +18,15 @@ object Dependencies
 
   lazy val circeLiteral = "io.circe" %% "circe-literal" % CirceVersion
 
+  lazy val doobie = "org.tpolecat" %% "doobie-core" % "0.12.1"
+
+  lazy val postgresql = "org.postgresql" % "postgresql" % "42.2.19"
+
   lazy val jodaTime = "joda-time" % "joda-time" % "2.10.10"
 
   lazy val enumeratum = "com.beachape" %% "enumeratum" % "1.6.1"
+
+  lazy val bcrypt = "org.mindrot" % "jbcrypt" % "0.4"
 
   lazy val pureconfig = "com.github.pureconfig" %% "pureconfig" % "0.14.1"
 

@@ -2,6 +2,7 @@ package com.ruchij.web.routes
 
 import cats.effect.Sync
 import cats.implicits._
+import com.ruchij.circe.Encoders.dateTimeEncoder
 import com.ruchij.services.authentication.AuthenticationService
 import com.ruchij.services.authorization.AuthorizationService
 import com.ruchij.services.color.ColorService
@@ -52,7 +53,7 @@ object UserRoutes {
             }
             yield response
 
-          case (request @ POST -> Root / userId / "color") as authenticatedRequestContext =>
+          case (request @ POST -> Root / UUIDVar(userId) / "color") as authenticatedRequestContext =>
             for {
               colorValue <- request.as[SelectColorRequest].map(_.color)
 
@@ -62,15 +63,15 @@ object UserRoutes {
             }
             yield response
 
-          case GET -> Root / userId / "color" as authenticatedRequestContext =>
+          case GET -> Root / UUIDVar(userId) / "color" as authenticatedRequestContext =>
             for {
               colors <- colorService.findByUserId(userId)(authenticatedRequestContext)
 
-              response <- Ok(UserColorResponse(colors))
+              response <- Ok(UserColorResponse.from(colors))
             }
             yield response
 
-          case (request @ POST -> Root / userId / "permission") as authenticatedRequestContext =>
+          case (request @ POST -> Root / UUIDVar(userId) / "permission") as authenticatedRequestContext =>
             for {
               AuthorizationRequest(grantee, permissionType) <- request.as[AuthorizationRequest]
 

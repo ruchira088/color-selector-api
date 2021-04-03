@@ -6,7 +6,7 @@ import cats.effect.Sync
 import cats.implicits._
 import com.ruchij.exceptions.ResourceNotFoundException
 import com.ruchij.types.FunctionKTypes
-import com.ruchij.web.middleware.CorrelationIdMiddleware.{CorrelationID, HttpAppWithContext}
+import com.ruchij.web.middleware.CorrelationIdMiddleware.HttpAppWithContext
 import com.ruchij.web.responses.ErrorResponse
 import org.http4s.dsl.impl.EntityResponseGenerator
 import org.http4s.{ContextRequest, Response, Status}

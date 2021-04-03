@@ -10,7 +10,7 @@ import com.ruchij.daos.permission.models.{Permission, PermissionType}
 import com.ruchij.daos.user.UserDao
 import com.ruchij.daos.user.models.User
 import com.ruchij.exceptions.ResourceConflictException
-import com.ruchij.services.hash.password.PasswordHashService
+import com.ruchij.services.hash.password.PasswordHashingService
 import com.ruchij.syntax._
 import com.ruchij.types.RandomGenerator
 import org.joda.time.DateTime
@@ -19,7 +19,7 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 class UserServiceImpl[F[_]: Monad: Clock: RandomGenerator[*[_], UUID], G[_]: MonadError[*[_], Throwable]](
-  passwordHashService: PasswordHashService[F],
+  passwordHashService: PasswordHashingService[F],
   userDao: UserDao[G],
   credentialsDao: CredentialsDao[G],
   permissionDao: PermissionDao[G]
@@ -33,7 +33,8 @@ class UserServiceImpl[F[_]: Monad: Clock: RandomGenerator[*[_], UUID], G[_]: Mon
           .findByUsername(username)
           .flatMap(_.nonEmptyF[Throwable, G](ResourceConflictException(s"$username already exists")))
           .product {
-            userDao.findByEmail(email)
+            userDao
+              .findByEmail(email)
               .flatMap {
                 _.nonEmptyF[Throwable, G] {
                   ResourceConflictException(s"$email already has a registered account")
@@ -42,7 +43,7 @@ class UserServiceImpl[F[_]: Monad: Clock: RandomGenerator[*[_], UUID], G[_]: Mon
           }
       }
 
-      userId <- RandomGenerator[F, UUID].generate.map(_.toString)
+      userId <- RandomGenerator[F, UUID].generate
 
       hashedPassword <- passwordHashService.hash(password)
 
@@ -53,13 +54,14 @@ class UserServiceImpl[F[_]: Monad: Clock: RandomGenerator[*[_], UUID], G[_]: Mon
       permission = Permission(userId, timestamp, userId, PermissionType.Write)
 
       _ <- transaction {
-        userDao.insert(user)
+        userDao
+          .insert(user)
           .productR(credentialsDao.insert(credentials))
           .productR(permissionDao.insert(permission))
       }
 
     } yield user
 
-  override def usernameAvailable(username: String): F[Boolean] =
-    transaction(userDao.findByUsername(username)).map(_.isEmpty)
+  override def retrieveAll(username: Option[String], offset: Int, pageSize: Int): F[List[User]] =
+    transaction(userDao.search(username, offset, pageSize))
 }

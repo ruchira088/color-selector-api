@@ -36,6 +36,9 @@ lazy val rootDependencies =
     circeLiteral,
     jodaTime,
     enumeratum,
+    bcrypt,
+    doobie,
+    postgresql,
     pureconfig,
     logbackClassic
   )

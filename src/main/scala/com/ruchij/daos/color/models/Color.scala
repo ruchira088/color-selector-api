@@ -2,4 +2,6 @@ package com.ruchij.daos.color.models
 
 import org.joda.time.DateTime
 
-case class Color(userId: String, createdAt: DateTime, modifiedAt: DateTime, colorValue: ColorValue)
+import java.util.UUID
+
+case class Color(userId: UUID, createdAt: DateTime, modifiedAt: DateTime, colorValue: ColorValue)

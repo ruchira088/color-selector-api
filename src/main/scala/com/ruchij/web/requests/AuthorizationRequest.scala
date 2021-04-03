@@ -2,4 +2,6 @@ package com.ruchij.web.requests
 
 import com.ruchij.daos.permission.models.PermissionType
 
-case class AuthorizationRequest(userId: String, permissionType: PermissionType)
+import java.util.UUID
+
+case class AuthorizationRequest(userId: UUID, permissionType: PermissionType)
