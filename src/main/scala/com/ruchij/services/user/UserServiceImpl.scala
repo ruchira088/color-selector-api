@@ -8,7 +8,7 @@ import com.ruchij.daos.credentials.models.Credentials
 import com.ruchij.daos.permission.PermissionDao
 import com.ruchij.daos.permission.models.{Permission, PermissionType}
 import com.ruchij.daos.user.UserDao
-import com.ruchij.daos.user.models.User
+import com.ruchij.daos.user.models.{Email, User}
 import com.ruchij.exceptions.ResourceConflictException
 import com.ruchij.services.hash.password.PasswordHashingService
 import com.ruchij.syntax._
@@ -26,7 +26,7 @@ class UserServiceImpl[F[_]: Monad: Clock: RandomGenerator[*[_], UUID], G[_]: Mon
 )(implicit transaction: G ~> F)
     extends UserService[F] {
 
-  override def create(username: String, password: String, firstName: String, lastName: String, email: String): F[User] =
+  override def create(username: String, password: String, firstName: String, lastName: String, email: Email): F[User] =
     for {
       _ <- transaction {
         userDao
@@ -37,7 +37,7 @@ class UserServiceImpl[F[_]: Monad: Clock: RandomGenerator[*[_], UUID], G[_]: Mon
               .findByEmail(email)
               .flatMap {
                 _.nonEmptyF[Throwable, G] {
-                  ResourceConflictException(s"$email already has a registered account")
+                  ResourceConflictException(s"${email.value} already has a registered account")
                 }
               }
           }

@@ -1,6 +1,6 @@
 package com.ruchij.daos.user
 
-import com.ruchij.daos.user.models.User
+import com.ruchij.daos.user.models.{Email, User}
 
 import java.util.UUID
 
@@ -14,6 +14,6 @@ trait UserDao[F[_]] {
 
   def findByUsername(username: String): F[Option[User]]
 
-  def findByEmail(email: String): F[Option[User]]
+  def findByEmail(email: Email): F[Option[User]]
 
 }

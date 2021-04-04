@@ -32,6 +32,8 @@ object Dependencies
 
   lazy val bcrypt = "org.mindrot" % "jbcrypt" % "0.4"
 
+  lazy val commonsValidator = "commons-validator" % "commons-validator" % "1.7"
+
   lazy val pureconfig = "com.github.pureconfig" %% "pureconfig" % "0.14.1"
 
   lazy val logbackClassic = "ch.qos.logback" % "logback-classic" % "1.2.3"

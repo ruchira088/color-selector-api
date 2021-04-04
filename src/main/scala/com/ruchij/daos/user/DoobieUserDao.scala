@@ -1,6 +1,6 @@
 package com.ruchij.daos.user
 
-import com.ruchij.daos.user.models.User
+import com.ruchij.daos.user.models.{Email, User}
 import doobie.ConnectionIO
 import doobie.util.fragments
 import doobie.implicits.toSqlInterpolator
@@ -23,7 +23,7 @@ object DoobieUserDao extends UserDao[ConnectionIO] {
           ${user.username},
           ${user.firstName},
           ${user.lastName},
-          ${user.email}
+          ${user.email.value}
         )
     """
       .update
@@ -35,8 +35,8 @@ object DoobieUserDao extends UserDao[ConnectionIO] {
   override def findByUsername(username: String): ConnectionIO[Option[User]] =
     (SelectQuery ++ fr"WHERE username = $username").query[User].option
 
-  override def findByEmail(email: String): ConnectionIO[Option[User]] =
-    (SelectQuery ++ fr"WHERE email = $email").query[User].option
+  override def findByEmail(email: Email): ConnectionIO[Option[User]] =
+    (SelectQuery ++ fr"WHERE email = ${email.value}").query[User].option
 
   override def search(maybeUsername: Option[String], offset: Int, pageSize: Int): ConnectionIO[List[User]] =
     (SelectQuery ++

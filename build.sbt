@@ -46,6 +46,7 @@ lazy val rootDependencies =
     doobie,
     postgresql,
     h2,
+    commonsValidator,
     pureconfig,
     logbackClassic
   )
