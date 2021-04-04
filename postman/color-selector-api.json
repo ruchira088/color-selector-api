@@ -1,0 +1,370 @@
+{
+	"info": {
+		"_postman_id": "19d83c24-52f9-4ef7-8347-ed0823f100b1",
+		"name": "Color Selector API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Service Information",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_host}}/service/info",
+					"host": [
+						"{{api_host}}"
+					],
+					"path": [
+						"service",
+						"info"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create User",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const PASSWORD = \"Passw0rd!\"",
+							"",
+							"const FIRST_NAMES = [",
+							"    \"Michael\",\"Christopher\",\"Jessica\",\"Matthew\",\"Ashley\",\"Jennifer\",\"Joshua\",\"Amanda\",\"Daniel\",\"David\",\"James\",\"Robert\",\"John\",",
+							"    \"Joseph\",\"Andrew\",\"Ryan\",\"Brandon\",\"Jason\",\"Justin\",\"Sarah\",\"William\",\"Jonathan\",\"Stephanie\",\"Brian\",\"Nicole\",\"Nicholas\",",
+							"    \"Anthony\",\"Heather\",\"Eric\",\"Elizabeth\",\"Adam\",\"Megan\",\"Melissa\",\"Kevin\",\"Steven\",\"Thomas\",\"Timothy\",\"Christina\",\"Kyle\",",
+							"    \"Rachel\",\"Laura\",\"Lauren\",\"Amber\",\"Brittany\",\"Danielle\",\"Richard\",\"Kimberly\",\"Jeffrey\",\"Amy\",\"Crystal\",\"Michelle\",",
+							"    \"Tiffany\",\"Jeremy\",\"Benjamin\",\"Mark\",\"Emily\",\"Aaron\",\"Charles\",\"Rebecca\",\"Jacob\",\"Stephen\",\"Patrick\",\"Sean\",\"Erin\",",
+							"    \"Zachary\",\"Jamie\",\"Kelly\",\"Samantha\",\"Nathan\",\"Sara\",\"Dustin\",\"Paul\",\"Angela\",\"Tyler\",\"Scott\",\"Katherine\",\"Andrea\",",
+							"    \"Gregory\",\"Erica\",\"Mary\",\"Travis\",\"Lisa\",\"Kenneth\",\"Bryan\",\"Lindsey\",\"Kristen\",\"Jose\",\"Alexander\",\"Jesse\",\"Katie\",",
+							"    \"Lindsay\",\"Shannon\",\"Vanessa\",\"Courtney\",\"Christine\",\"Alicia\",\"Cody\",\"Allison\",\"Bradley\",\"Samuel\",\"Shawn\",\"April\",\"Derek\",",
+							"    \"Kathryn\",\"Kristin\",\"Chad\",\"Jenna\",\"Tara\",\"Maria\",\"Krystal\",\"Jared\",\"Anna\",\"Edward\",\"Julie\",\"Peter\",\"Holly\",\"Marcus\",",
+							"    \"Kristina\",\"Natalie\",\"Jordan\",\"Victoria\",\"Jacqueline\",\"Corey\",\"Keith\",\"Monica\",\"Juan\",\"Donald\",\"Cassandra\",\"Meghan\",\"Joel\",",
+							"    \"Shane\",\"Phillip\",\"Patricia\",\"Brett\",\"Ronald\",\"Catherine\",\"George\",\"Antonio\",\"Cynthia\",\"Stacy\",\"Kathleen\",\"Raymond\",",
+							"    \"Carlos\",\"Brandi\",\"Douglas\",\"Nathaniel\",\"Ian\",\"Craig\",\"Brandy\",\"Alex\",\"Valerie\",\"Veronica\",\"Cory\",\"Whitney\",\"Gary\",",
+							"    \"Derrick\",\"Philip\",\"Luis\",\"Diana\",\"Chelsea\",\"Leslie\",\"Caitlin\",\"Leah\",\"Natasha\",\"Erika\",\"Casey\",\"Latoya\",\"Erik\",\"Dana\",",
+							"    \"Victor\",\"Brent\",\"Dominique\",\"Frank\",\"Brittney\",\"Evan\",\"Gabriel\",\"Julia\",\"Candice\",\"Karen\",\"Melanie\",\"Adrian\",\"Stacey\",",
+							"    \"Margaret\",\"Sheena\",\"Wesley\",\"Vincent\",\"Alexandra\",\"Katrina\",\"Bethany\",\"Nichole\",\"Larry\",\"Jeffery\",\"Curtis\",\"Carrie\",",
+							"    \"Todd\",\"Blake\",\"Christian\",\"Randy\",\"Dennis\",\"Alison\",\"Trevor\",\"Seth\",\"Kara\",\"Joanna\",\"Rachael\",\"Luke\",\"Felicia\",\"Brooke\",",
+							"    \"Austin\",\"Candace\",\"Jasmine\",\"Jesus\",\"Alan\",\"Susan\",\"Sandra\",\"Tracy\",\"Kayla\",\"Nancy\",\"Tina\",\"Krystle\",\"Russell\",\"Jeremiah\",",
+							"    \"Carl\",\"Miguel\",\"Tony\",\"Alexis\",\"Gina\",\"Jillian\",\"Pamela\",\"Mitchell\",\"Hannah\",\"Renee\",\"Denise\",\"Molly\",\"Jerry\",\"Misty\",",
+							"    \"Mario\",\"Johnathan\",\"Jaclyn\",\"Brenda\",\"Terry\",\"Lacey\",\"Shaun\",\"Devin\",\"Heidi\",\"Troy\",\"Lucas\",\"Desiree\",\"Jorge\",\"Andre\",",
+							"    \"Morgan\",\"Drew\",\"Sabrina\",\"Miranda\",\"Alyssa\",\"Alisha\",\"Teresa\",\"Johnny\",\"Meagan\",\"Allen\",\"Krista\",\"Marc\",\"Tabitha\",\"Lance\",",
+							"    \"Ricardo\",\"Martin\",\"Chase\",\"Theresa\",\"Melinda\",\"Monique\",\"Tanya\",\"Linda\",\"Kristopher\",\"Bobby\",\"Caleb\",\"Ashlee\",\"Kelli\",",
+							"    \"Henry\",\"Garrett\",\"Mallory\",\"Jill\",\"Jonathon\",\"Kristy\",\"Anne\",\"Francisco\",\"Danny\",\"Robin\",\"Lee\",\"Tamara\",\"Manuel\",",
+							"    \"Meredith\",\"Colleen\",\"Lawrence\",\"Christy\",\"Ricky\",\"Randall\",\"Marissa\",\"Ross\",\"Mathew\",\"Jimmy\",\"Abigail\",\"Kendra\",\"Carolyn\",",
+							"    \"Billy\",\"Deanna\",\"Jenny\",\"Jon\",\"Albert\",\"Taylor\",\"Lori\",\"Rebekah\",\"Cameron\",\"Ebony\",\"Wendy\",\"Angel\",\"Micheal\",\"Kristi\",",
+							"    \"Caroline\",\"Colin\",\"Dawn\",\"Kari\",\"Clayton\",\"Arthur\",\"Roger\",\"Roberto\",\"Priscilla\",\"Darren\",\"Kelsey\",\"Clinton\",\"Walter\",",
+							"    \"Louis\",\"Barbara\",\"Isaac\",\"Cassie\",\"Grant\",\"Cristina\",\"Tonya\",\"Rodney\",\"Bridget\",\"Joe\",\"Cindy\",\"Oscar\",\"Willie\",\"Maurice\",",
+							"    \"Jaime\",\"Angelica\",\"Sharon\",\"Julian\",\"Jack\",\"Jay\",\"Calvin\",\"Marie\",\"Hector\",\"Kate\",\"Adrienne\",\"Tasha\",\"Michele\",\"Ana\",",
+							"    \"Stefanie\",\"Cara\",\"Alejandro\",\"Ruben\",\"Gerald\",\"Audrey\",\"Kristine\",\"Ann\",\"Shana\",\"Javier\",\"Katelyn\",\"Brianna\",\"Bruce\",",
+							"    \"Deborah\",\"Claudia\",\"Carla\",\"Wayne\",\"Roy\",\"Virginia\",\"Haley\",\"Brendan\",\"Janelle\",\"Jacquelyn\",\"Beth\",\"Edwin\",\"Dylan\",",
+							"    \"Dominic\",\"Latasha\",\"Darrell\",\"Geoffrey\",\"Savannah\",\"Reginald\",\"Carly\",\"Fernando\",\"Ashleigh\",\"Aimee\",\"Regina\",\"Mandy\",",
+							"    \"Sergio\",\"Rafael\",\"Pedro\",\"Janet\",\"Kaitlin\",\"Frederick\",\"Cheryl\",\"Autumn\",\"Tyrone\",\"Martha\",\"Omar\",\"Lydia\",\"Jerome\",",
+							"    \"Theodore\",\"Abby\",\"Neil\",\"Shawna\",\"Sierra\",\"Nina\",\"Tammy\",\"Nikki\",\"Terrance\",\"Donna\",\"Claire\",\"Cole\",\"Trisha\",\"Bonnie\",",
+							"    \"Diane\",\"Summer\",\"Carmen\",\"Mayra\",\"Jermaine\",\"Eddie\",\"Micah\",\"Marvin\",\"Levi\",\"Emmanuel\",\"Brad\",\"Taryn\",\"Toni\",\"Jessie\",",
+							"    \"Evelyn\",\"Darryl\",\"Ronnie\",\"Joy\",\"Adriana\",\"Ruth\",\"Mindy\",\"Spencer\",\"Noah\",\"Raul\",\"Suzanne\",\"Sophia\",\"Dale\",\"Jodi\",",
+							"    \"Christie\",\"Raquel\",\"Naomi\",\"Kellie\",\"Ernest\",\"Jake\",\"Grace\",\"Tristan\",\"Shanna\",\"Hilary\",\"Eduardo\",\"Ivan\",\"Hillary\",",
+							"    \"Yolanda\",\"Alberto\",\"Andres\",\"Olivia\",\"Armando\",\"Paula\",\"Amelia\",\"Sheila\",\"Rosa\",\"Robyn\",\"Kurt\",\"Dane\",\"Glenn\",\"Nicolas\",",
+							"    \"Gloria\",\"Eugene\",\"Logan\",\"Steve\",\"Ramon\",\"Bryce\",\"Tommy\",\"Preston\",\"Keri\",\"Devon\",\"Alana\",\"Marisa\",\"Melody\",\"Rose\",",
+							"    \"Barry\",\"Marco\",\"Karl\",\"Daisy\",\"Leonard\",\"Randi\",\"Maggie\",\"Charlotte\"",
+							"]",
+							"",
+							"const LAST_NAMES = [",
+							"    \"Smith\",\"Johnson\",\"Williams\",\"Brown\",\"Jones\",\"Miller\",\"Davis\",\"Garcia\",\"Rodriguez\",\"Wilson\",\"Martinez\",\"Anderson\",\"Taylor\",",
+							"    \"Thomas\",\"Hernandez\",\"Moore\",\"Martin\",\"Jackson\",\"Thompson\",\"White\",\"Lopez\",\"Lee\",\"Gonzalez\",\"Harris\",\"Clark\",\"Lewis\",",
+							"    \"Robinson\",\"Walker\",\"Perez\",\"Hall\",\"Young\",\"Allen\",\"Sanchez\",\"Wright\",\"King\",\"Scott\",\"Green\",\"Baker\",\"Adams\",\"Nelson\",",
+							"    \"Hill\",\"Ramirez\",\"Campbell\",\"Mitchell\",\"Roberts\",\"Carter\",\"Phillips\",\"Evans\",\"Turner\",\"Torres\",\"Parker\",\"Collins\",",
+							"    \"Edwards\",\"Stewart\",\"Flores\",\"Morris\",\"Nguyen\",\"Murphy\",\"Rivera\",\"Cook\",\"Rogers\",\"Morgan\",\"Peterson\",\"Cooper\",\"Reed\",",
+							"    \"Bailey\",\"Bell\",\"Gomez\",\"Kelly\",\"Howard\",\"Ward\",\"Cox\",\"Diaz\",\"Richardson\",\"Wood\",\"Watson\",\"Brooks\",\"Bennett\",\"Gray\",",
+							"    \"James\",\"Reyes\",\"Cruz\",\"Hughes\",\"Price\",\"Myers\",\"Long\",\"Foster\",\"Sanders\",\"Ross\",\"Morales\",\"Powell\",\"Sullivan\",\"Russell\",",
+							"    \"Ortiz\",\"Jenkins\",\"Gutierrez\",\"Perry\",\"Butler\",\"Barnes\",\"Fisher\",\"Henderson\",\"Coleman\",\"Simmons\",\"Patterson\",\"Jordan\",",
+							"    \"Reynolds\",\"Hamilton\",\"Graham\",\"Kim\",\"Gonzales\",\"Alexander\",\"Ramos\",\"Wallace\",\"Griffin\",\"West\",\"Cole\",\"Hayes\",\"Chavez\",",
+							"    \"Gibson\",\"Bryant\",\"Ellis\",\"Stevens\",\"Murray\",\"Ford\",\"Marshall\",\"Owens\",\"Mcdonald\",\"Harrison\",\"Ruiz\",\"Kennedy\",\"Wells\",",
+							"    \"Alvarez\",\"Woods\",\"Mendoza\",\"Castillo\",\"Olson\",\"Webb\",\"Washington\",\"Tucker\",\"Freeman\",\"Burns\",\"Henry\",\"Vasquez\",\"Snyder\",",
+							"    \"Simpson\",\"Crawford\",\"Jimenez\",\"Porter\",\"Mason\",\"Shaw\",\"Gordon\",\"Wagner\",\"Hunter\",\"Romero\",\"Hicks\",\"Dixon\",\"Hunt\",\"Palmer\",",
+							"    \"Robertson\",\"Black\",\"Holmes\",\"Stone\",\"Meyer\",\"Boyd\",\"Mills\",\"Warren\",\"Fox\",\"Rose\",\"Rice\",\"Moreno\",\"Schmidt\",\"Patel\",",
+							"    \"Ferguson\",\"Nichols\",\"Herrera\",\"Medina\",\"Ryan\",\"Fernandez\",\"Weaver\",\"Daniels\",\"Stephens\",\"Gardner\",\"Payne\",\"Kelley\",\"Dunn\",",
+							"    \"Pierce\",\"Arnold\",\"Tran\",\"Spencer\",\"Peters\",\"Hawkins\",\"Grant\",\"Hansen\",\"Castro\",\"Hoffman\",\"Hart\",\"Elliott\",\"Cunningham\",",
+							"    \"Knight\",\"Bradley\",\"Carroll\",\"Hudson\",\"Duncan\",\"Armstrong\",\"Berry\",\"Andrews\",\"Johnston\",\"Ray\",\"Lane\",\"Riley\",\"Carpenter\",",
+							"    \"Perkins\",\"Aguilar\",\"Silva\",\"Richards\",\"Willis\",\"Matthews\",\"Chapman\",\"Lawrence\",\"Garza\",\"Vargas\",\"Watkins\",\"Wheeler\",",
+							"    \"Larson\",\"Carlson\",\"Harper\",\"George\",\"Greene\",\"Burke\",\"Guzman\",\"Morrison\",\"Munoz\",\"Jacobs\",\"Obrien\",\"Lawson\",\"Franklin\",",
+							"    \"Lynch\",\"Bishop\",\"Carr\",\"Salazar\",\"Austin\",\"Mendez\",\"Gilbert\",\"Jensen\",\"Williamson\",\"Montgomery\",\"Harvey\",\"Oliver\",",
+							"    \"Howell\",\"Dean\",\"Hanson\",\"Weber\",\"Garrett\",\"Sims\",\"Burton\",\"Fuller\",\"Soto\",\"Mccoy\",\"Welch\",\"Chen\",\"Schultz\",\"Walters\",",
+							"    \"Reid\",\"Fields\",\"Walsh\",\"Little\",\"Fowler\",\"Bowman\",\"Davidson\",\"May\",\"Day\",\"Schneider\",\"Newman\",\"Brewer\",\"Lucas\",\"Holland\",",
+							"    \"Wong\",\"Banks\",\"Santos\",\"Curtis\",\"Pearson\",\"Delgado\",\"Valdez\",\"Pena\",\"Rios\",\"Douglas\",\"Sandoval\",\"Barrett\",\"Hopkins\",",
+							"    \"Keller\",\"Guerrero\",\"Stanley\",\"Bates\",\"Alvarado\",\"Beck\",\"Ortega\",\"Wade\",\"Estrada\",\"Contreras\",\"Barnett\",\"Caldwell\",",
+							"    \"Santiago\",\"Lambert\",\"Powers\",\"Chambers\",\"Nunez\",\"Craig\",\"Leonard\",\"Lowe\",\"Rhodes\",\"Byrd\",\"Gregory\",\"Shelton\",\"Frazier\",",
+							"    \"Becker\",\"Maldonado\",\"Fleming\",\"Vega\",\"Sutton\",\"Cohen\",\"Jennings\",\"Parks\",\"Mcdaniel\",\"Watts\",\"Barker\",\"Norris\",\"Vaughn\",",
+							"    \"Vazquez\",\"Holt\",\"Schwartz\",\"Steele\",\"Benson\",\"Neal\",\"Dominguez\",\"Horton\",\"Terry\",\"Wolfe\",\"Hale\",\"Lyons\",\"Graves\",\"Haynes\",",
+							"    \"Miles\",\"Park\",\"Warner\",\"Padilla\",\"Bush\",\"Thornton\",\"Mccarthy\",\"Mann\",\"Zimmerman\",\"Erickson\",\"Fletcher\",\"Mckinney\",\"Page\",",
+							"    \"Dawson\",\"Joseph\",\"Marquez\",\"Reeves\",\"Klein\",\"Espinoza\",\"Baldwin\",\"Moran\",\"Love\",\"Robbins\",\"Higgins\",\"Ball\",\"Cortez\",\"Le\",",
+							"    \"Griffith\",\"Bowen\",\"Sharp\",\"Cummings\",\"Ramsey\",\"Hardy\",\"Swanson\",\"Barber\",\"Acosta\",\"Luna\",\"Chandler\",\"Blair\",\"Daniel\",",
+							"    \"Cross\",\"Simon\",\"Dennis\",\"Oconnor\",\"Quinn\",\"Gross\",\"Navarro\",\"Moss\",\"Fitzgerald\",\"Doyle\",\"Mclaughlin\",\"Rojas\",\"Rodgers\",",
+							"    \"Stevenson\",\"Singh\",\"Yang\",\"Figueroa\",\"Harmon\",\"Newton\",\"Paul\",\"Manning\",\"Garner\",\"Mcgee\",\"Reese\",\"Francis\",\"Burgess\",",
+							"    \"Adkins\",\"Goodman\",\"Curry\",\"Brady\",\"Christensen\",\"Potter\",\"Walton\",\"Goodwin\",\"Mullins\",\"Molina\",\"Webster\",\"Fischer\",",
+							"    \"Campos\",\"Avila\",\"Sherman\",\"Todd\",\"Chang\",\"Blake\",\"Malone\",\"Wolf\",\"Hodges\",\"Juarez\",\"Gill\",\"Farmer\",\"Hines\",\"Gallagher\",",
+							"    \"Duran\",\"Hubbard\",\"Cannon\",\"Miranda\",\"Wang\",\"Saunders\",\"Tate\",\"Mack\",\"Hammond\",\"Carrillo\",\"Townsend\",\"Wise\",\"Ingram\",",
+							"    \"Barton\",\"Mejia\",\"Ayala\",\"Schroeder\",\"Hampton\",\"Rowe\",\"Parsons\",\"Frank\",\"Waters\",\"Strickland\",\"Osborne\",\"Maxwell\",\"Chan\",",
+							"    \"Deleon\",\"Norman\",\"Harrington\",\"Casey\",\"Patton\",\"Logan\",\"Bowers\",\"Mueller\",\"Glover\",\"Floyd\",\"Hartman\",\"Buchanan\",\"Cobb\",",
+							"    \"French\",\"Kramer\",\"Mccormick\",\"Clarke\",\"Tyler\",\"Gibbs\",\"Moody\",\"Conner\",\"Sparks\",\"Mcguire\",\"Leon\",\"Bauer\",\"Norton\",\"Pope\",",
+							"    \"Flynn\",\"Hogan\",\"Robles\",\"Salinas\",\"Yates\",\"Lindsey\",\"Lloyd\",\"Marsh\",\"Mcbride\",\"Owen\",\"Solis\",\"Pham\",\"Lang\",\"Pratt\"",
+							"]",
+							"",
+							"const EMAIL_PROVIDERS = [",
+							"    \"gmail.com\", \"ruchij.com\", \"live.com\", \"yahoo.com\", \"hotmail.com\", \"icloud.com\"",
+							"]",
+							"",
+							"const randomNumber = max => Math.floor(Math.random() * max)",
+							"const randomSelection = values => values[randomNumber(values.length)]",
+							"",
+							"const firstName = randomSelection(FIRST_NAMES)",
+							"const lastName = randomSelection(LAST_NAMES)",
+							"const username = `${firstName.toLowerCase()}.${lastName.toLowerCase()}`",
+							"const email = `${username}@${randomSelection(EMAIL_PROVIDERS)}`",
+							"",
+							"pm.environment.set(\"username\", username)",
+							"pm.environment.set(\"password\", PASSWORD)",
+							"pm.environment.set(\"firstName\", firstName)",
+							"pm.environment.set(\"lastName\", lastName)",
+							"pm.environment.set(\"email\", email)",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{username}}\",\n    \"password\": \"{{password}}\",\n    \"firstName\": \"{{firstName}}\",\n    \"lastName\": \"{{lastName}}\",\n    \"email\": \"{{email}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_host}}/user",
+					"host": [
+						"{{api_host}}"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const {userId, secret} = pm.response.json()",
+							"",
+							"",
+							"pm.environment.set(\"userId\", userId)",
+							"pm.environment.set(\"secret\", secret)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{username}}\",\n    \"password\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_host}}/session",
+					"host": [
+						"{{api_host}}"
+					],
+					"path": [
+						"session"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Authenticated User",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userId}}--{{secret}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_host}}/session/user",
+					"host": [
+						"{{api_host}}"
+					],
+					"path": [
+						"session",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userId}}--{{secret}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{api_host}}/session",
+					"host": [
+						"{{api_host}}"
+					],
+					"path": [
+						"session"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Users",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userId}}--{{secret}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_host}}/user?page-size=10",
+					"host": [
+						"{{api_host}}"
+					],
+					"path": [
+						"user"
+					],
+					"query": [
+						{
+							"key": "page-size",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Set User Color",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userId}}--{{secret}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"color\": \"{{$randomHexColor}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_host}}/user/{{userId}}/color",
+					"host": [
+						"{{api_host}}"
+					],
+					"path": [
+						"user",
+						"{{userId}}",
+						"color"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User Color",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userId}}--{{secret}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_host}}/user/{{userId}}/color",
+					"host": [
+						"{{api_host}}"
+					],
+					"path": [
+						"user",
+						"{{userId}}",
+						"color"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
