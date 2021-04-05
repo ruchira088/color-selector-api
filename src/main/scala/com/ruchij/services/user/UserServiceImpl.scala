@@ -62,6 +62,9 @@ class UserServiceImpl[F[_]: Monad: Clock: RandomGenerator[*[_], UUID], G[_]: Mon
 
     } yield user
 
-  override def retrieveAll(username: Option[String], offset: Int, pageSize: Int): F[List[User]] =
+  override def search(username: Option[String], offset: Int, pageSize: Int): F[List[User]] =
     transaction(userDao.search(username, offset, pageSize))
+
+  override def usernameExists(username: String): F[Boolean] =
+    transaction(userDao.findByUsername(username)).map(_.nonEmpty)
 }
