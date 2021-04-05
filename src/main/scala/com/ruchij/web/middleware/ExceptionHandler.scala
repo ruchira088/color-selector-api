@@ -1,6 +1,5 @@
 package com.ruchij.web.middleware
 
-import cats.Show
 import cats.arrow.FunctionK
 import cats.data.{Kleisli, NonEmptyList}
 import cats.effect.Sync
