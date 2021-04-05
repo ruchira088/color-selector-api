@@ -34,7 +34,7 @@ class AuthorizationServiceImpl[F[_]: MonadError[*[_], Throwable]: Clock, G[_]](p
         _ <-
           transaction(permissionDao.findBy(userId, resourceId, permissionType))
             .flatMap {
-              _.toF[Throwable, F](ResourceConflictException(s"$userId already has $permissionType permission to $resourceId"))
+              _.nonEmptyF[Throwable, F](ResourceConflictException(s"$userId already has $permissionType permission to $resourceId"))
             }
 
         timestamp <- Clock[F].realTime(TimeUnit.MILLISECONDS).map(milliseconds => new DateTime(milliseconds))

@@ -4,4 +4,4 @@ import com.ruchij.daos.permission.models.PermissionType
 
 import java.util.UUID
 
-case class AuthorizationRequest(userId: UUID, permissionType: PermissionType)
+case class AuthorizationRequest(granteeId: UUID, permissionType: PermissionType)

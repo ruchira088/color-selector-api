@@ -9,7 +9,7 @@ import com.ruchij.services.user.UserService
 import com.ruchij.types.RandomGenerator
 import com.ruchij.web.middleware.CorrelationIdMiddleware.CorrelationID
 import com.ruchij.web.middleware.{CorrelationIdMiddleware, ExceptionHandler, NotFoundHandler}
-import com.ruchij.web.routes.{HealthRoutes, SessionRoutes, UserRoutes}
+import com.ruchij.web.routes.{HealthRoutes, SearchRoutes, SessionRoutes, UserRoutes}
 import org.http4s.dsl.Http4sDsl
 import org.http4s.server.ContextRouter
 import org.http4s.{ContextRoutes, HttpApp}
@@ -30,6 +30,7 @@ object Routes {
       ContextRouter(
         "/service" -> HealthRoutes(healthService),
         "/user" -> UserRoutes(userService, colorService, authorizationService, authenticationService),
+        "/search" -> SearchRoutes(userService, authenticationService),
         "/session" -> SessionRoutes(authenticationService)
       )
 

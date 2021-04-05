@@ -129,11 +129,27 @@
 							"const username = `${firstName.toLowerCase()}.${lastName.toLowerCase()}`",
 							"const email = `${username}@${randomSelection(EMAIL_PROVIDERS)}`",
 							"",
+							"",
 							"pm.environment.set(\"username\", username)",
 							"pm.environment.set(\"password\", PASSWORD)",
 							"pm.environment.set(\"firstName\", firstName)",
 							"pm.environment.set(\"lastName\", lastName)",
 							"pm.environment.set(\"email\", email)",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const {id} = pm.response.json()",
+							"",
+							"pm.environment.set(\"userId\", id)",
+							"",
 							""
 						],
 						"type": "text/javascript"
@@ -174,10 +190,8 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"const {userId, secret} = pm.response.json()",
+							"const {secret} = pm.response.json()",
 							"",
-							"",
-							"pm.environment.set(\"userId\", userId)",
 							"pm.environment.set(\"secret\", secret)"
 						],
 						"type": "text/javascript"
@@ -282,11 +296,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{api_host}}/user?page-size=10",
+					"raw": "{{api_host}}/search/user?page-size=10",
 					"host": [
 						"{{api_host}}"
 					],
 					"path": [
+						"search",
 						"user"
 					],
 					"query": [
@@ -300,7 +315,85 @@
 			"response": []
 		},
 		{
-			"name": "Set User Color",
+			"name": "Username Exists",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userId}}--{{secret}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_host}}/search/username/{{username}}",
+					"host": [
+						"{{api_host}}"
+					],
+					"path": [
+						"search",
+						"username",
+						"{{username}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Grant Permission",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userId}}--{{secret}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"granteeId\": \"{{userId}}\",\n    \"permissionType\": \"Read\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_host}}/user/{{userId}}/permission",
+					"host": [
+						"{{api_host}}"
+					],
+					"path": [
+						"user",
+						"{{userId}}",
+						"permission"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Set User Color Copy",
 			"request": {
 				"auth": {
 					"type": "bearer",
