@@ -1,13 +1,13 @@
 package com.ruchij.daos.doobie
 
-import doobie.util.Put
 import doobie.implicits.javasql.TimestampMeta
+import doobie.util.Put
 import enumeratum.EnumEntry
 import org.joda.time.DateTime
 import org.tpolecat.typename.TypeName
 
 import java.sql.Timestamp
-import java.util.{Date, UUID}
+import java.util.UUID
 
 object PutMappings {
 

@@ -40,17 +40,18 @@ class HealthRoutesSpec extends AnyFlatSpec with Matchers {
         "timestamp": $dateTime
       }"""
 
-    for {
-      (httpApp, _) <- HttpTestApp[IO]
+    HttpTestApp[IO].use {
+      case (httpApp, _) =>
+        for {
+          response <- httpApp.run(request)
 
-      response <- httpApp.run(request)
-
-      _ = {
-        response must beJsonContentType
-        response must haveJson(expectedJsonResponse)
-        response must haveStatus(Status.Ok)
-      }
+          _ = {
+            response must beJsonContentType
+            response must haveJson(expectedJsonResponse)
+            response must haveStatus(Status.Ok)
+          }
+        }
+        yield (): Unit
     }
-      yield (): Unit
   }
 }

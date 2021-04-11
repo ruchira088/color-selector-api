@@ -44,6 +44,7 @@ lazy val rootDependencies =
     enumeratum,
     bcrypt,
     doobie,
+    doobieHikari,
     postgresql,
     h2,
     commonsValidator,

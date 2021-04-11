@@ -16,7 +16,7 @@ import com.ruchij.services.color.ColorServiceImpl
 import com.ruchij.services.hash.password.BCryptPasswordHashingService
 import com.ruchij.services.health.HealthServiceImpl
 import com.ruchij.services.user.UserServiceImpl
-import com.ruchij.types.{FunctionKTypes, RandomGenerator}
+import com.ruchij.types.RandomGenerator
 import com.ruchij.web.Routes
 import doobie.ConnectionIO
 import org.http4s.HttpApp
@@ -56,7 +56,7 @@ object App extends IOApp {
       ioBlockingThreadPool <- Resource.eval(Sync[F].delay(Executors.newCachedThreadPool()))
       ioBlocker = Blocker.liftExecutorService(ioBlockingThreadPool)
 
-      httpApp <- Resource.eval(build[F](serviceConfiguration, cpuBlocker, ioBlocker))
+      httpApp <- build[F](serviceConfiguration, cpuBlocker, ioBlocker)
     }
     yield httpApp
 
@@ -64,12 +64,12 @@ object App extends IOApp {
     serviceConfiguration: ServiceConfiguration,
     cpuBlocker: Blocker,
     ioBlocker: Blocker
-  ): F[HttpApp[F]] = {
-    MigrationApp.migrate[F](serviceConfiguration.databaseConfiguration)
+  ): Resource[F, HttpApp[F]] = {
+    Resource.eval(MigrationApp.migrate[F](serviceConfiguration.databaseConfiguration))
       .productR {
         DoobieTransactor
           .create[F](serviceConfiguration.databaseConfiguration, ioBlocker)
-          .map(transactor => FunctionKTypes.connectionIoToF[F](transactor))
+          .map(_.trans)
           .map { implicit transaction =>
             val healthService = new HealthServiceImpl[F](serviceConfiguration.buildInformation)
             val passwordHashingService = new BCryptPasswordHashingService[F](cpuBlocker)

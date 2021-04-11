@@ -1,9 +1,9 @@
 package com.ruchij.test
 
-import cats.effect.{Async, Blocker, Clock, ContextShift}
-import cats.implicits._
+import cats.effect.{Async, Blocker, Clock, ContextShift, Resource}
 import com.ruchij.App
 import com.ruchij.config.{AuthenticationConfiguration, BuildInformation, HttpConfiguration, ServiceConfiguration}
+import com.ruchij.migration.MigrationApp
 import com.ruchij.migration.config.DatabaseConfiguration
 import com.ruchij.types.RandomGenerator
 import org.http4s.HttpApp
@@ -29,12 +29,15 @@ object HttpTestApp {
 
   def apply[F[_]: Async: Clock: ContextShift: RandomGenerator[*[_], UUID]](
     implicit executionContext: ExecutionContext
-  ): F[(HttpApp[F], ServiceConfiguration)] = {
+  ): Resource[F, (HttpApp[F], ServiceConfiguration)] = {
     val blocker = Blocker.liftExecutionContext(executionContext)
 
-    RandomGenerator[F, UUID].generate
+    Resource.eval(RandomGenerator[F, UUID].generate)
       .map { uuid =>
         ServiceConfiguration(databaseConfiguration(uuid.toString), AuthConfig, HttpConfig, BuildInfo)
+      }
+      .evalTap {
+        serviceConfiguration => MigrationApp.migrate(serviceConfiguration.databaseConfiguration)
       }
       .flatMap { serviceConfiguration =>
         App
