@@ -27,6 +27,27 @@
 			"response": []
 		},
 		{
+			"name": "Health Check",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_host}}/service/health-check",
+					"host": [
+						"{{api_host}}"
+					],
+					"path": [
+						"service",
+						"health-check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Create User",
 			"event": [
 				{
@@ -393,7 +414,7 @@
 			"response": []
 		},
 		{
-			"name": "Set User Color Copy",
+			"name": "Set User Color",
 			"request": {
 				"auth": {
 					"type": "bearer",
