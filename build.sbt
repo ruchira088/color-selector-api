@@ -107,6 +107,7 @@ val mergeReleaseToMaster = { state: State =>
 
   updatedState
 }
+
 releaseProcess := Seq(
   ReleaseStep(verifyReleaseBranch),
   checkSnapshotDependencies,

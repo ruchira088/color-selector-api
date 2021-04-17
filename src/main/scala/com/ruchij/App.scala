@@ -1,12 +1,13 @@
 package com.ruchij
 
-import cats.effect.{Async, Blocker, Clock, ContextShift, ExitCode, IO, IOApp, Resource, Sync}
+import cats.effect.{Blocker, Concurrent, ContextShift, ExitCode, IO, IOApp, Resource, Sync, Timer}
 import cats.implicits._
 import com.ruchij.config.ServiceConfiguration
 import com.ruchij.daos.authentication.DoobieAuthenticationTokenDao
 import com.ruchij.daos.color.DoobieColorDao
 import com.ruchij.daos.credentials.DoobieCredentialsDao
 import com.ruchij.daos.doobie.DoobieTransactor
+import com.ruchij.daos.health.DoobieHealthCheckDao
 import com.ruchij.daos.permission.DoobiePermissionDao
 import com.ruchij.daos.user.DoobieUserDao
 import com.ruchij.migration.MigrationApp
@@ -45,7 +46,7 @@ object App extends IOApp {
         }
     } yield ExitCode.Success
 
-  def build[F[_]: Async: ContextShift: Clock: RandomGenerator[*[_], UUID]](
+  def build[F[_]: Concurrent: ContextShift: Timer: RandomGenerator[*[_], UUID]](
     serviceConfiguration: ServiceConfiguration
   ): Resource[F, HttpApp[F]] =
     for {
@@ -60,7 +61,7 @@ object App extends IOApp {
     }
     yield httpApp
 
-  def build[F[_]: Async: ContextShift: Clock: RandomGenerator[*[_], UUID]](
+  def build[F[_]: Concurrent: ContextShift: Timer: RandomGenerator[*[_], UUID]](
     serviceConfiguration: ServiceConfiguration,
     cpuBlocker: Blocker,
     ioBlocker: Blocker
@@ -71,7 +72,7 @@ object App extends IOApp {
           .create[F](serviceConfiguration.databaseConfiguration, ioBlocker)
           .map(_.trans)
           .map { implicit transaction =>
-            val healthService = new HealthServiceImpl[F](serviceConfiguration.buildInformation)
+            val healthService = new HealthServiceImpl[F, ConnectionIO](DoobieHealthCheckDao, serviceConfiguration.buildInformation)
             val passwordHashingService = new BCryptPasswordHashingService[F](cpuBlocker)
 
             val authorizationService = new AuthorizationServiceImpl[F, ConnectionIO](DoobiePermissionDao)

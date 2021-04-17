@@ -1,12 +1,12 @@
 package com.ruchij.web.routes
 
-import cats.effect.{Clock, IO}
+import cats.effect.{IO, Timer}
 import com.eed3si9n.ruchij.BuildInfo
 import com.ruchij.circe.Encoders.dateTimeEncoder
 import com.ruchij.test.HttpTestApp
 import com.ruchij.test.matchers._
 import com.ruchij.test.utils.IOUtils.runIO
-import com.ruchij.test.utils.Providers.{ioContextShift, stubClock}
+import com.ruchij.test.utils.Providers.{ioContextShift, stubClock, timerIO}
 import io.circe.literal._
 import org.http4s.Method.GET
 import org.http4s.implicits.http4sLiteralsSyntax
@@ -22,7 +22,7 @@ class HealthRoutesSpec extends AnyFlatSpec with Matchers {
 
   "GET /service/info" should "return a successful response containing service information" in runIO {
     val dateTime = DateTime.now()
-    implicit val clock: Clock[IO] = stubClock[IO](dateTime)
+    implicit val timer: Timer[IO] = timerIO(stubClock[IO](dateTime))
 
     val request = Request[IO](GET, uri"/service/info")
 

@@ -2,7 +2,7 @@ package com.ruchij.web.routes
 
 import cats.effect.Sync
 import cats.implicits.toFlatMapOps
-import com.ruchij.circe.Encoders.dateTimeEncoder
+import com.ruchij.circe.Encoders.{dateTimeEncoder, enumEncoder}
 import com.ruchij.services.health.HealthService
 import com.ruchij.web.middleware.CorrelationIdMiddleware.CorrelationID
 import io.circe.generic.auto.exportEncoder
@@ -17,8 +17,15 @@ object HealthRoutes {
 
     ContextRoutes.of[CorrelationID, F] {
       case GET -> Root / "info" as _ =>
-        healthService.serviceInformation()
+        healthService.serviceInformation
           .flatMap(serviceInformation => Ok(serviceInformation))
+
+      case GET -> Root / "health-check" as _ =>
+        healthService.serviceStatus
+          .flatMap {
+            serviceStatus =>
+              if (serviceStatus.isHealthy) Ok(serviceStatus) else InternalServerError(serviceStatus)
+          }
     }
   }
 
